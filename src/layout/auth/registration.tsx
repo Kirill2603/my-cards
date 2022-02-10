@@ -1,5 +1,14 @@
 import React from "react";
-import {Button, Center, Flex, Grid, GridItem, Input, InputGroup, InputRightElement, Link, Text} from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Text
+} from "@chakra-ui/react";
 
 export const Registration = () => {
   const [showPas, setShowPas] = React.useState(false)
@@ -9,14 +18,14 @@ export const Registration = () => {
 
   return (
       <Center p={5}>
-        <Grid borderWidth='1px' borderRadius='lg' w={"md"} justifyContent={"center"}>
-          <GridItem textAlign={"center"} p={10}>
+        <Flex borderWidth='1px' borderRadius='lg' w={"md"} justifyContent={"center"} flexDirection={"column"}>
+          <Box textAlign={"center"} p={10}>
             <Text fontSize={"5xl"}>Cards</Text>
 
             <Text fontSize={"3xl"}>Sign Up</Text>
-          </GridItem>
+          </Box>
 
-          <GridItem pt={5} pb={5}>
+          <Box p={10}>
             <Text fontSize={"2xl"}>Email</Text>
             <Input type={"email"} variant={"filled"}/>
             <Text fontSize={"2xl"}>Password</Text>
@@ -45,14 +54,14 @@ export const Registration = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
-          </GridItem>
+          </Box>
 
-          <Flex justifyContent={"space-between"} pt={10} pb={10}>
+          <Flex justifyContent={"space-between"} p={10}>
             <Button w={'40%'} colorScheme={"gray"}>Cancel</Button>
             <Button w={'40%'} colorScheme={"linkedin"}>Register</Button>
           </Flex>
 
-        </Grid>
+        </Flex>
       </Center>
   )
 }

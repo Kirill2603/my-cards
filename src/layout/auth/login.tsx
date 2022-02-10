@@ -1,26 +1,59 @@
-import React from "react";
-import {Button, Center, Flex, Grid, GridItem, Input, InputGroup, InputRightElement, Link, Text} from "@chakra-ui/react";
+import React, {ChangeEvent, useState} from "react";
+import {
+    Box,
+    Button,
+    Center, Checkbox,
+    Flex,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Text
+} from "@chakra-ui/react";
+import {useDispatch, useSelector} from "react-redux";
+import {initAuthStateType, LoginThunk} from "../../store/reducers/auth-reducer";
+import {Link, Navigate} from "react-router-dom";
+import {AppRootStateType} from "../../store/store";
 
 export const Login = () => {
-
+    const dispatch = useDispatch()
     const [show, setShow] = React.useState(false)
     const handleClick = () => setShow(!show)
 
-    return (
+    const {isLoggedIn, loggedInError} = useSelector<AppRootStateType, initAuthStateType>(state => state.auth)
+
+    console.log(isLoggedIn + '   ' + loggedInError)
+
+    const [email, setEmail] = useState<string>('nya-admin@nya.nya')
+    const [password, setPassword] = useState<string>('1qazxcvBG')
+    const [rememberMe, setRememberMe] = useState<boolean>(false)
+    const changeEmail = (e: ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget.value)
+    const changePassword = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.currentTarget.value)
+    const changeRememberMe = (e: ChangeEvent<HTMLInputElement>) => setRememberMe(!rememberMe)
+    const login = () => {
+        dispatch(LoginThunk({email, password, rememberMe}))
+    }
+
+    if(isLoggedIn) {
+        return <Navigate to={'/cards'}/>
+    } else return (
+        <>
+
         <Center p={5}>
-            <Grid borderWidth='1px' borderRadius='lg' w={"md"} justifyContent={"center"}>
-                <GridItem textAlign={"center"} p={10}>
+            <Flex borderWidth='1px' borderRadius='lg' w={"md"} justifyContent={"center"} flexDirection={"column"}>
+
+                <Box textAlign={"center"} p={10}>
                     <Text fontSize={"5xl"}>Cards</Text>
-
                     <Text fontSize={"3xl"}>Sign In</Text>
-                </GridItem>
+                </Box>
 
-                <GridItem pt={5} pb={5}>
+                <Box pl={10} pr={10}>
                     <Text fontSize={"2xl"}>Email</Text>
-                    <Input type={"email"} variant={"filled"}/>
+                    <Input type={"email"} variant={"filled"} value={email} onChange={changeEmail}/>
                     <Text fontSize={"2xl"}>Password</Text>
                     <InputGroup size='md'>
                         <Input
+                            value={password}
+                            onChange={changePassword}
                             variant={"filled"}
                             pr='4.5rem'
                             type={show ? 'text' : 'password'}
@@ -32,17 +65,24 @@ export const Login = () => {
                         </InputRightElement>
                     </InputGroup>
                     <Flex direction={"row-reverse"} pt={5} pb={5}>
-                        <Link color={"blue.300"}>Forgot Password?</Link>
+                        <Checkbox defaultIsChecked={rememberMe} onChange={changeRememberMe}>Remember Me</Checkbox>
                     </Flex>
-                </GridItem>
+                    <Flex direction={"row-reverse"}>
+                        <Button as={Link} to={'/forgot'} variant={"link"} color={"blue.300"}>Forgot Password?</Button>
+                    </Flex>
+                </Box>
 
-                <Button colorScheme={"linkedin"}>Login</Button>
-                <Center flexDir={"column"} p={10}>
+                <Flex justifyContent={"center"} p={5}>
+                    <Button
+                        onClick={login}
+                        colorScheme={"linkedin"}>Login</Button>
+                </Flex>
+                <Center flexDir={"column"} pb={10}>
                     <Text fontSize={"lg"}>Don't have an account?</Text>
-                    <Link color={"blue.300"}>Sign Up</Link>
+                    <Button as={Link} to={'/register'} variant={"link"} color={"blue.300"}>Sign Up</Button>
                 </Center>
-            </Grid>
+            </Flex>
         </Center>
-
+        </>
     )
 }
